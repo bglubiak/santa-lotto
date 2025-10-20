@@ -1,0 +1,122 @@
+body {
+  background: linear-gradient(120deg, #e52d27 0%, #b31217 100%);
+  min-height: 100vh;
+  margin: 0;
+  font-family: 'Segoe UI', 'Arial', sans-serif;
+  position: relative;
+}
+
+.snowflakes {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.snowflake {
+  color: #fff;
+  font-size: 1.5em;
+  position: absolute;
+  animation: fall 8s linear infinite;
+  opacity: 0.8;
+}
+
+@keyframes fall {
+  0% { top: -5%; }
+  100% { top: 100%; }
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 2rem;
+  position: relative;
+  z-index: 1;
+}
+
+.holiday-icon {
+  width: 56px;
+  height: 56px;
+  color: #fff700;
+  margin-right: 14px;
+  filter: drop-shadow(0 0 6px rgba(255,255,0,0.6));
+  animation: giftBounce 2.8s ease-in-out infinite;
+}
+
+@keyframes giftBounce {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-8px) rotate(3deg); }
+}
+
+.twinkle {
+  color: #fff700;
+  text-shadow: 0 0 8px #fff700, 0 0 16px #fff700;
+  animation: twinkle 1.2s infinite alternate;
+}
+
+@keyframes twinkle {
+  0% { opacity: 1; }
+  100% { opacity: 0.5; }
+}
+
+h1 {
+  font-size: 2.5rem;
+  color: #fff;
+  letter-spacing: 2px;
+  margin: 0;
+  position: relative;
+  z-index: 1;
+}
+
+p {
+  color: #fff;
+  text-align: center;
+  margin-top: 1rem;
+  font-size: 1.2rem;
+}
+
+.music-toggle {
+  position: fixed;
+  top: 12px;
+  right: 12px;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 1rem;
+}
+
+.music-toggle button {
+  background: rgba(255,255,255,0.15);
+  backdrop-filter: blur(4px);
+  border: 1px solid rgba(255,255,255,0.4);
+  color: #fff;
+  cursor: pointer;
+  padding: 10px 12px;
+  font-size: 1.25rem;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s ease, background 0.3s ease;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.25);
+}
+
+.music-toggle button:hover {
+  transform: scale(1.08);
+  background: rgba(255,255,255,0.3);
+}
+
+.music-toggle button:active {
+  transform: scale(0.95);
+}
+
+.music-error {
+  color: #ffdfdf;
+  font-size: 0.75rem;
+  max-width: 160px;
+}

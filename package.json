@@ -3,6 +3,13 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
+    "build": "vite build",
+    "dev": "vite",
+    "format": "biome format --write",
+    "format:check": "biome format",
+    "lint": "biome lint && tsc --noEmit",
+    "lint:fix": "biome lint --write",
+    "preview": "vite preview",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
@@ -10,7 +17,16 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
-    "@types/node": "^22.10.2",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
+    "react-icons": "^5.5.0",
     "typescript": "^5.7.2"
+  },
+  "devDependencies": {
+    "@types/node": "^24.9.0",
+    "@types/react": "^19.2.2",
+    "@types/react-dom": "^19.2.2",
+    "biome": "^0.3.3",
+    "vite": "^7.1.11"
   }
 }

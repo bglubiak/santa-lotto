@@ -1,31 +1,10 @@
 import * as readline from 'readline';
+import { drawNames, computePersonsWithoutGift } from './utils/drawNames';
 
 const rl = readline.createInterface({
     input: process.stdin,
     output: process.stdout
 });
-
-function shuffle(array: string[]): string[] {
-    for (let i = array.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [array[i], array[j]] = [array[j], array[i]];
-    }
-    return array;
-}
-
-function drawNames(names: string[]): Record<string, string> {
-    let shuffledNames = shuffle([...names]);
-    const result: Record<string, string> = {};
-
-    for (let i = 0; i < names.length; i++) {
-        if (names[i] === shuffledNames[i]) {
-            // If a person is assigned to themselves, reshuffle
-            return drawNames(names);
-        }
-        result[names[i]] = shuffledNames[i];
-    }
-    return result;
-}
 
 rl.question('Enter names separated by commas: ', (input: string) => {
     const names = input.split(',').map(name => name.trim());
@@ -39,8 +18,7 @@ rl.question('Enter names separated by commas: ', (input: string) => {
     }
 
     const result = drawNames(names);
-    const receivers = new Set(Object.values(result));
-    const personsWithoutGift = names.filter(name => !receivers.has(name));
+    const personsWithoutGift = computePersonsWithoutGift(names, result);
 
     console.log('Gift Exchange Results:');
     console.log('======================');
