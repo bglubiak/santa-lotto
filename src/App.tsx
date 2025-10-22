@@ -34,10 +34,9 @@ export default function App() {
       <div className="header">
         <FaGift className="holiday-icon" />
         <h1>
-          <span className="twinkle">Santa Lotto 2.0</span>
+          <span className="twinkle">Santa Lotto</span>
         </h1>
       </div>
-      <p>React + Vite + TypeScript frontend.</p>
       <div style={{ display: 'flex', justifyContent: 'center', zIndex: 2, position: 'relative' }}>
         <SantaDraw />
       </div>

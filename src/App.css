@@ -120,3 +120,13 @@ p {
   font-size: 0.75rem;
   max-width: 160px;
 }
+
+@media print {
+  body { background: #fff !important; }
+  .no-print { display: none !important; }
+  .snowflakes { display: none !important; }
+  .music-toggle { display: none !important; }
+  h1, h2, h3 { color: #000 !important; text-shadow: none !important; }
+  p { color: #000 !important; }
+  .santa-draw-container { box-shadow: none !important; background: #fff !important; }
+}
