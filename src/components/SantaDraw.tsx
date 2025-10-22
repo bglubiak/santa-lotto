@@ -16,6 +16,8 @@ export default function SantaDraw() {
   ]);
   const [results, setResults] = useState<DrawResult[] | null>(null);
   const [error, setError] = useState('');
+  const [sending, setSending] = useState(false);
+  const [sendSummary, setSendSummary] = useState<string>('');
 
   function updateParticipant(id: string, patch: Partial<Participant>) {
     setParticipants(p => p.map(row => row.id === id ? { ...row, ...patch } : row));
@@ -90,6 +92,41 @@ export default function SantaDraw() {
     window.print();
   }
 
+  async function sendEmails() {
+    if (!results) return;
+    setSending(true);
+    setSendSummary('');
+    const payload = {
+      emails: results.map(r => ({
+        to: r.giver.email,
+        subject: r.subject,
+        body: buildPlainBody(r.giver.name, r.receiver.name, r.wishlistItems)
+      }))
+    };
+    try {
+      const res = await fetch('http://localhost:4000/api/send-emails', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        setSendSummary(`Failed: ${data.error || 'Unknown error'}`);
+      } else {
+        const failedCount = data.failedCount || 0;
+        if (failedCount === 0) {
+          setSendSummary(`All ${data.total} emails sent successfully.`);
+        } else {
+          setSendSummary(`Sent ${data.total - failedCount}/${data.total}. Failures: ${data.results.filter((r: any) => !r.success).map((r: any) => r.to).join(', ')}`);
+        }
+      }
+    } catch (e: any) {
+      setSendSummary(`Network error: ${e?.message || 'Unknown'}`);
+    } finally {
+      setSending(false);
+    }
+  }
+
   return (
     <div className="santa-draw-container" style={{ marginTop: '2rem', padding: '1rem', background: '#fffaf4', border: '1px solid #eee', borderRadius: 12, width: '98%', maxWidth: 1200, minWidth: 600, marginLeft: 'auto', marginRight: 'auto' }}>
       <h2 style={{ marginTop: 0, fontFamily: '"Mountains of Christmas", cursive', fontWeight: 700, fontSize: '2.2rem', color: '#b31217', letterSpacing: '1px', textShadow: '0 2px 8px #fff70088, 0 0 2px #fff' }}>Enter participants</h2>
@@ -144,8 +181,10 @@ export default function SantaDraw() {
               </li>
             ))}
           </ul>
-          <div style={{ marginTop: 12 }} className="no-print">
+          <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', marginTop: 12 }} className="no-print">
             <button onClick={handlePrint} style={btnSecondaryStyle}>Print / Save PDF</button>
+            <button onClick={sendEmails} style={{ ...btnStyle, opacity: sending ? 0.6 : 1 }} disabled={sending}>{sending ? 'Sending...' : 'Send Emails'}</button>
+            {sendSummary && <span style={{ fontSize: 12, color: sendSummary.startsWith('All') ? '#2e7d32' : (sendSummary.startsWith('Sent') ? '#c77d00' : '#b00020') }}>{sendSummary}</span>}
           </div>
         </div>
       )}
@@ -168,6 +207,10 @@ function formatEmailBody(giver: string, receiver: string, wishlist: string[]): s
 
 function buildMailTo(email: string, subject: string, body: string): string {
   return `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${body}`; // body already partially encoded
+}
+
+function buildPlainBody(giver: string, receiver: string, wishlist: string[]): string {
+  return `Hi ${giver},\n\nYou are the Secret Santa for ${receiver}! 🎄\nWishlist suggestions:\n${wishlist.map((w,i) => `${i+1}. ${w}`).join('\n') || 'No wishlist provided.'}\n\nPlease keep it secret!\nMerry Christmas!`;
 }
 
 const btnStyle: React.CSSProperties = { background: '#e63946', color: '#fff', border: 'none', padding: '8px 14px', borderRadius: 8, cursor: 'pointer', fontWeight: 600 };

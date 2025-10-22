@@ -10,19 +10,15 @@ export function MusicToggle() {
   function handleClick() {
     const audio = audioRef.current;
     if (!audio) return;
-
-    // First click: start playback.
     if (!playing) {
       audio.play().then(() => {
         setPlaying(true);
         if (muted) audio.muted = true;
       }).catch(() => {
-        // Playback blocked; user can click again. Keep it silent.
+        // blocked
       });
       return;
     }
-
-    // Subsequent clicks: toggle mute.
     const nextMuted = !muted;
     audio.muted = nextMuted;
     setMuted(nextMuted);
@@ -33,7 +29,14 @@ export function MusicToggle() {
   return (
     <div className="music-toggle">
       <audio ref={audioRef} src={jingle} loop preload="auto" />
-      <button type="button" aria-label={label} title={label} onClick={handleClick}>
+      {/* Hint appears only before first play */}
+      {!playing && (
+        <button type="button" className="music-hint" onClick={handleClick} aria-label="Turn on the music">
+          Turn on the music! →
+        </button>
+      )}
+      {/* Volume control icon (clickable) always visible; before play it starts music, after play it toggles mute */}
+      <button type="button" onClick={handleClick} aria-label={label} className="music-toggle-btn">
         {(!playing || !muted) ? <FaVolumeUp /> : <FaVolumeMute />}
       </button>
     </div>

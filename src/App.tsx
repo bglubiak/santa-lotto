@@ -1,4 +1,3 @@
-import React from 'react';
 import './App.css';
 import MusicToggle from './components/MusicToggle';
 import { FaGift } from 'react-icons/fa';

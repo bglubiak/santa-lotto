@@ -121,6 +121,32 @@ p {
   max-width: 160px;
 }
 
+.music-hint {
+  background: rgba(255,255,255,0.18);
+  border: 1px solid rgba(255,255,255,0.5);
+  color: #fff;
+  cursor: pointer;
+  padding: 8px 12px 8px 14px;
+  font-size: 1.05rem;
+  border-radius: 10px;
+  font-weight: 600;
+  letter-spacing: 1px; /* slightly larger for decorative font */
+  display: flex;
+  align-items: center;
+  animation: pulseHint 1.4s ease-in-out infinite;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.25);
+  backdrop-filter: blur(4px);
+  font-family: 'Mountains of Christmas', cursive;
+}
+
+.music-hint:hover { background: rgba(255,255,255,0.32); }
+
+@keyframes pulseHint {
+  0% { transform: translateX(0); }
+  50% { transform: translateX(-4px); }
+  100% { transform: translateX(0); }
+}
+
 @media print {
   body { background: #fff !important; }
   .no-print { display: none !important; }
